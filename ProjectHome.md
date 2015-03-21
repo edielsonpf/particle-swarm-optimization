@@ -1,0 +1,1 @@
+This is a Matlab/Scilab code implementation of a particle swarm optimization algorithm for helping on teaching this subject.
