@@ -11,17 +11,23 @@ if __name__ == '__main__':
  
     #define as constantes da colonia
     NUM_BIRDS = 200
-    NUM_INTERACTIONS = 200
+    NUM_INTERACTIONS = 100
     MAX_SIZE = 10
     MAX_ERRO = 0.1
     NUM_VARS = 3
     
-    #Define a posicao da comida.
+    #Define a posicao da comida aleatoriamente
     roostPoint = np.random.randn(NUM_VARS)*5
     
      
     swarm = pso(NUM_BIRDS,NUM_VARS,NUM_INTERACTIONS)
-    gbest = swarm.search(roostPoint,MAX_ERRO)
-    plt.plot(gbest)
+    gbestVal = swarm.search(roostPoint,MAX_ERRO)
+    
+    print(gbestVal)
+    interaction=[i for i in range(len(gbestVal))]
+    print(interaction)
+    
+    plt.pause(5)
+    plt.plot(interaction,gbestVal)
     plt.show()  
     

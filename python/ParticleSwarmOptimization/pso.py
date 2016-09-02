@@ -96,7 +96,7 @@ class pso(object):
  
         # Alternar entre valores: 0.01, 0.007, 0.005, 0.003, 0.001
         INCREMENT = 0.01;
-        LIMIT = 0.1;
+        LIMIT = 0.07;
          
         for particle in range(self.num_particles):
             for var in range(self.num_vars):
@@ -120,10 +120,12 @@ class pso(object):
         velocities = np.random.randn(self.num_particles,self.num_vars)*0.03
      
         #Armezena o melhor valor ao logo de cada iteracao
-        gbestVal = np.zeros(self.max_num_interactions)
+        #gbestVal = np.zeros(self.max_num_interactions)
+        gbestValHist = []
     
         #Executa o voo.
         interaction=0
+                
         while interaction < self.max_num_interactions:
             
             #Calcula a nova velocidade dos passaros pelo metodo
@@ -134,7 +136,8 @@ class pso(object):
             self.velocities=self.__craziness(velocities)
             
             #Encontra o passaro que tem amenor distancia para a comida
-            gbest,gbestVal[interaction] = self.__roost(particles, target)
+            gbest,gbestVal = self.__roost(particles, target)
+            gbestValHist.append(gbestVal)
             
             #Recalcula a velocidade baseada no passaro de maior sucesso.
             velocities = self.__cornfieldVector(particles, velocities, gbest)
@@ -148,12 +151,16 @@ class pso(object):
             plt.pause(0.0001)
             
             #Muda a posicao da comida.
-            if gbestVal[interaction] <= max_error:
-                target = np.random.randn(self.num_vars)*5;
+#             if gbestVal <= max_error:
+#                 target = np.random.randn(self.num_vars)*5;
             
-            interaction = interaction+1
+            if gbestVal <= max_error:
+                interaction = self.max_num_interactions
+            else:
+                interaction = interaction+1
         
-        return gbestVal
+        plt.clf()    
+        return gbestValHist
     
 #     def __printParticles(self,ax,particles):
         
