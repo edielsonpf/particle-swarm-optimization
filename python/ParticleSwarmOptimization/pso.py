@@ -70,7 +70,7 @@ class pso(object):
             
             crazinessBird = np.random.rand()
             
-            if crazinessBird < 0.02:
+            if crazinessBird < 0.2:
                 
                 newVel = np.random.randn(1,3)*0.03
                 for var in range(self.num_vars):
@@ -130,10 +130,10 @@ class pso(object):
             
             #Calcula a nova velocidade dos passaros pelo metodo
             #Nearest Neighbor Velocity Matching.
-            velocities=self.__velocityMatching(particles, velocities)
+#             velocities=self.__velocityMatching(particles, velocities)
             
             #Introduz a variavel Craziness.
-            self.velocities=self.__craziness(velocities)
+#             self.velocities=self.__craziness(velocities)
             
             #Encontra o passaro que tem amenor distancia para a comida
             gbest,gbestVal = self.__roost(particles, target)
@@ -153,7 +153,7 @@ class pso(object):
             #Muda a posicao da comida.
 #             if gbestVal <= max_error:
 #                 target = np.random.randn(self.num_vars)*5;
-            
+#             interaction = interaction+1            
             if gbestVal <= max_error:
                 interaction = self.max_num_interactions
             else:

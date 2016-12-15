@@ -11,7 +11,7 @@ if __name__ == '__main__':
  
     #define as constantes da colonia
     NUM_BIRDS = 200
-    NUM_INTERACTIONS = 100
+    NUM_INTERACTIONS = 1000
     MAX_SIZE = 10
     MAX_ERRO = 0.1
     NUM_VARS = 3
