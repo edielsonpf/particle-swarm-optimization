@@ -13,7 +13,7 @@ class pso(object):
     '''
 
 
-    def __init__(self, num_particles,num_vars,max_interactions):
+    def __init__(self, num_particles,num_vars,max_interactions,option='CORNFIELD_VECTOR'):
         '''
         Constructor
         '''
@@ -22,7 +22,11 @@ class pso(object):
         self.num_vars = num_vars
         
         self.max_num_interactions = max_interactions
-    
+        
+        if (option == 'NEAREST_NEIGHBOR_VELOCITY_MATCHING'):
+            self.option = 1
+        else: #'CORNFIELD_VECTOR'
+            self.option = 2
     
     def __distEuclidean(self,p1,p2):
         
@@ -70,7 +74,7 @@ class pso(object):
             
             crazinessBird = np.random.rand()
             
-            if crazinessBird < 0.2:
+            if crazinessBird < 0.02:
                 
                 newVel = np.random.randn(1,3)*0.03
                 for var in range(self.num_vars):
@@ -111,7 +115,7 @@ class pso(object):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
         plt.ion() 
-
+        
         #Geracao da matriz de passaros, cada passaro e um conjunto 3D de pontos.
         #Inicialmente a posicao e aleatoria.
         particles = np.random.randn(self.num_particles,self.num_vars)*3
@@ -127,20 +131,21 @@ class pso(object):
         interaction=0
                 
         while interaction < self.max_num_interactions:
-            
-            #Calcula a nova velocidade dos passaros pelo metodo
-            #Nearest Neighbor Velocity Matching.
-#             velocities=self.__velocityMatching(particles, velocities)
-            
-            #Introduz a variavel Craziness.
-#             self.velocities=self.__craziness(velocities)
-            
+        
             #Encontra o passaro que tem amenor distancia para a comida
             gbest,gbestVal = self.__roost(particles, target)
             gbestValHist.append(gbestVal)
             
-            #Recalcula a velocidade baseada no passaro de maior sucesso.
-            velocities = self.__cornfieldVector(particles, velocities, gbest)
+            if self.option == 1:
+                #Calcula a nova velocidade dos passaros pelo metodo
+                #Nearest Neighbor Velocity Matching.
+                velocities=self.__velocityMatching(particles, velocities)
+                #Introduz a variavel Craziness.
+                self.velocities=self.__craziness(velocities)
+            
+            if self.option == 2:
+                #Recalcula a velocidade baseada no passaro de maior sucesso.
+                velocities = self.__cornfieldVector(particles, velocities, gbest)
         
             #Recalcula a posicao de cada passaro.
             particles = particles+velocities
@@ -151,13 +156,9 @@ class pso(object):
             plt.pause(0.0001)
             
             #Muda a posicao da comida.
-#             if gbestVal <= max_error:
-#                 target = np.random.randn(self.num_vars)*5;
-#             interaction = interaction+1            
             if gbestVal <= max_error:
-                interaction = self.max_num_interactions
-            else:
-                interaction = interaction+1
+                target = np.random.randn(self.num_vars)*5;
+            interaction = interaction+1            
         
         plt.clf()    
         return gbestValHist

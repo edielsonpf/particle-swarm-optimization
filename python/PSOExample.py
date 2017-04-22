@@ -3,6 +3,10 @@
 #
 # Por Edielson Prevato Frigieri
 
+#import sys
+#import os.path
+#sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 import numpy as np
 from ParticleSwarmOptimization.pso import pso
 import matplotlib.pyplot as plt
@@ -10,17 +14,20 @@ import matplotlib.pyplot as plt
 if __name__ == '__main__': 
  
     #define as constantes da colonia
-    NUM_BIRDS = 200
-    NUM_INTERACTIONS = 1000
+    NUM_BIRDS = 50
+    NUM_INTERACTIONS = 200
     MAX_SIZE = 10
     MAX_ERRO = 0.1
     NUM_VARS = 3
+    
+    #OPTION = 'CORNFIELD_VECTOR'
+    OPTION = 'NEAREST_NEIGHBOR_VELOCITY_MATCHING'
     
     #Define a posicao da comida aleatoriamente
     roostPoint = np.random.randn(NUM_VARS)*5
     
      
-    swarm = pso(NUM_BIRDS,NUM_VARS,NUM_INTERACTIONS)
+    swarm = pso(NUM_BIRDS,NUM_VARS,NUM_INTERACTIONS,OPTION)
     gbestVal = swarm.search(roostPoint,MAX_ERRO)
     
     print(gbestVal)
