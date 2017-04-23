@@ -20,8 +20,8 @@ if __name__ == '__main__':
     MAX_ERRO = 0.1
     NUM_VARS = 3
     
-    #OPTION = 'CORNFIELD_VECTOR'
-    OPTION = 'NEAREST_NEIGHBOR_VELOCITY_MATCHING'
+    OPTION = 'CORNFIELD_VECTOR'
+    #OPTION = 'NEAREST_NEIGHBOR_VELOCITY_MATCHING'
     
     #Define a posicao da comida aleatoriamente
     roostPoint = np.random.randn(NUM_VARS)*5
@@ -30,7 +30,6 @@ if __name__ == '__main__':
     swarm = pso(NUM_BIRDS,NUM_VARS,NUM_INTERACTIONS,OPTION)
     gbestVal = swarm.search(roostPoint,MAX_ERRO)
     
-    print(gbestVal)
     interaction=[i for i in range(len(gbestVal))]
     print(interaction)
     

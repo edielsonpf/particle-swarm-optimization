@@ -12,7 +12,6 @@ class pso(object):
     classdocs
     '''
 
-
     def __init__(self, num_particles,num_vars,max_interactions,option='CORNFIELD_VECTOR'):
         '''
         Constructor
@@ -27,6 +26,11 @@ class pso(object):
             self.option = 1
         else: #'CORNFIELD_VECTOR'
             self.option = 2
+    
+    def __Rosenbrock(self,particle):
+        x1=particle[0]
+        x2=particle[1]
+        return (1-x1)**2+100.0*(x2-x1**2)**2
     
     def __distEuclidean(self,p1,p2):
         
@@ -89,17 +93,21 @@ class pso(object):
          
         for particle in range(self.num_particles):                   #Para cada passaro do bando.
             #Calcula a distancia euclidiana para a posicao da comida.
-            dist = self.__distEuclidean(particles[particle], objective)
+            #dist = self.__distEuclidean(particles[particle], objective)
+            dist = self.__Rosenbrock(particles[particle])
+            print('Dist = %g'%dist)
             if gbestVal > dist:        #Se e menor que a ja existente
                 gbest = particle;          #Substitui.
                 gbestVal = dist;
+                print('gbest = %s' %gbest)
+                print('gbestVal = %g' %gbestVal)
          
         return gbest,gbestVal       
     
     def __cornfieldVector(self,particles, velocities, gbest):
  
         # Alternar entre valores: 0.01, 0.007, 0.005, 0.003, 0.001
-        INCREMENT = 0.01;
+        INCREMENT = 0.0001;
         LIMIT = 0.07;
          
         for particle in range(self.num_particles):
@@ -112,14 +120,10 @@ class pso(object):
     
     def search(self,target,max_error):
         
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        plt.ion() 
-        
         #Geracao da matriz de passaros, cada passaro e um conjunto 3D de pontos.
         #Inicialmente a posicao e aleatoria.
-        particles = np.random.randn(self.num_particles,self.num_vars)*3
-     
+        particles = np.random.uniform(-1,1,(self.num_particles,self.num_vars))
+        
         #Geracao do vetor de movimento de cada passaro. Inicialmente aleatorio.
         velocities = np.random.randn(self.num_particles,self.num_vars)*0.03
      
@@ -129,13 +133,14 @@ class pso(object):
     
         #Executa o voo.
         interaction=0
-                
-        while interaction < self.max_num_interactions:
         
-            #Encontra o passaro que tem amenor distancia para a comida
-            gbest,gbestVal = self.__roost(particles, target)
-            gbestValHist.append(gbestVal)
-            
+        #Encontra o passaro que tem amenor distancia para a comida
+        gbest,gbestVal = self.__roost(particles, target)
+        
+        gbestValHist.append(gbestVal)
+                        
+        while (interaction < self.max_num_interactions) and (np.abs(gbestVal-target) > max_error):
+        
             if self.option == 1:
                 #Calcula a nova velocidade dos passaros pelo metodo
                 #Nearest Neighbor Velocity Matching.
@@ -150,19 +155,13 @@ class pso(object):
             #Recalcula a posicao de cada passaro.
             particles = particles+velocities
             
-            plt.cla()
-            ax.scatter(target[0], target[1], target[2], s=80, c='b', marker='x')
-            ax.scatter(particles[:,0], particles[:,1], particles[:,2], c='r', marker='o')
-            plt.pause(0.0001)
+            #Encontra o passaro que tem amenor distancia para a comida
+            gbest,gbestVal = self.__roost(particles, target)
             
-            #Muda a posicao da comida.
-            if gbestVal <= max_error:
-                target = np.random.randn(self.num_vars)*5;
-            interaction = interaction+1            
-        
-        plt.clf()    
-        return gbestValHist
-    
-#     def __printParticles(self,ax,particles):
-        
+            gbestValHist.append(gbestVal)
+                        
+            interaction = interaction+1
+
+        return gbestValHist,particles[gbest],gbestVal
+           
         
