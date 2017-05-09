@@ -8,7 +8,7 @@
 #sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import numpy as np
-from ParticleSwarmOptimization.pso import pso
+from ParticleSwarmOptimization.pso_rosenbrock import pso
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__': 
@@ -18,10 +18,10 @@ if __name__ == '__main__':
     NUM_INTERACTIONS = 500
     MAX_SIZE = 10
     MAX_ERRO = 0.1
-    NUM_VARS = 3
+    NUM_VARS = 2
     
-    #OPTION = 'CORNFIELD_VECTOR'
-    OPTION = 'NEAREST_NEIGHBOR_VELOCITY_MATCHING'
+    OPTION = 'CORNFIELD_VECTOR'
+    #OPTION = 'NEAREST_NEIGHBOR_VELOCITY_MATCHING'
     
     #Define a posicao da comida aleatoriamente
     roostPoint = np.random.randn(NUM_VARS)*5
