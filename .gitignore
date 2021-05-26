@@ -1,0 +1,15 @@
+*.pyc
+*.so
+*.pyd
+*~
+.vs/
+.eggs/
+.vscode
+.coverage
+.pytest_cache/
+TestResults/
+dist/
+build/
+__pycache__
+ChangeLog
+AUTHORS
